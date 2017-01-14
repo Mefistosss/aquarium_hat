@@ -13,7 +13,7 @@ const int selectButtonPin = 6;
 const int lightsPin = 5;
 const int socketPin = 7;
 const int fanPin = 8;
-const int fanBoradPin = 9;
+const int fanBoardPin = 9;
 
 int menuButtonState = 0;
 int menuTypeState = -1;
@@ -48,6 +48,8 @@ const int timeOfDisplayLight = 30000;
 
 void setup()
 {
+//  Serial.begin(9600);
+//  Serial.print("\t");
   delay(300);
   time.begin();
 //  time.settime(0,20,20);
@@ -92,8 +94,8 @@ void setup()
   pinMode(lightsPin, OUTPUT);
   pinMode(socketPin, OUTPUT);
   pinMode(fanPin, OUTPUT);
-  pinMode(fanBoradPin, OUTPUT);
-  digitalWrite(fanBoradPin, HIGH);
+  pinMode(fanBoardPin, OUTPUT);
+  digitalWrite(fanBoardPin, HIGH);
 }
 
 void loop()
@@ -389,11 +391,11 @@ boolean isMore(int currentH, int currentM, int h, int m)
   if (h == currentH && m == currentM) {
     return true;
   } else {
-    if (h > currentH) {
+    if (currentH > h) {
       return true;
     } else {
       if (h == currentH) {
-        return m > currentM;
+        return currentM > m;
       } else {
         return false;
       }
