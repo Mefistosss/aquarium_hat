@@ -1,7 +1,7 @@
 # aquarium_hat
 
 ### Elements:
-Element       | Mark                                  | Number
+Element       | Marking                               | Number
 --------------|---------------------------------------|--------
 Arduino       | Arduino UNO                           | 1
 LCD + module  | LCD 1602 16 x 2 hd44780 + PCF8574T    | 1
@@ -42,4 +42,6 @@ Led Substrate | LED Mount 1pcs                        | 12
 * light fan - 8
 * arduino fan - 9
 
+**Power Supply**
+![Power Supply](https://www.dropbox.com/s/0zgbakalr5lz3xo/HE-1201-OF-4.jpg?dl=0)
 
