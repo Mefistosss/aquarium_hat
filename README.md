@@ -1,30 +1,30 @@
 # aquarium_hat
 
 ### Arduino uno, pins:
-**Clock:**
+:alarm_clock:**Clock:**
 * VCC - 5V
 * GND - GND
 * CLK - 13
 * DAT - 12
 * RST - 10
 
-**Display:**
+:computer:**Display:**
 * GND - GND
 * VCC - 5V
 * SDA - A4
 * SCL - A5
 
-**Menu buttons:**
+:white_square_button:**Menu buttons:**
 * menu button - 3
 * select button - 6
 
-**Light:**
+:bulb:**Light:**
 * light - 5
 
-**Soсket:**
+:electric_plug:**Soсket:**
 * soсket - 7
 
-**Fan:**
+:cyclone:**Fan:**
 * light fan - 8
 * arduino fan - 9
 
