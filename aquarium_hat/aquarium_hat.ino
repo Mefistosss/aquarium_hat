@@ -28,6 +28,15 @@ int fanBoradState = 0;
 
 String nameOfSelectType = "";
 
+/* datas[]
+ *  datas[*][0] - hours
+ *  datas[*][1] - minutes
+ *  
+ *  datas[0][*] - light on
+ *  datas[1][*] - light off
+ *  datas[2][*] - socket on
+ *  datas[3][*] - socket off
+*/
 int datas[4][2] = {{7, 0}, {20, 0}, {5, 0}, {23, 0}};
 int copyDatas[4][2] = {{7, 0}, {20, 0}, {5, 0}, {23, 0}};
 String weekDays[7] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
@@ -119,7 +128,7 @@ void loop()
     }
   }
 
-  delay(1);// приостанавливаем на 1 мс, чтоб не выводить время несколько раз за 1мс
+  delay(1);// show time not more than one time in 1ms
 }
 
 void switchState(int pin, int state) {
@@ -428,65 +437,49 @@ void checkStates(long currentMillis)
     m = time.minutes;
     h = time.Hours;
     onFan[0] = datas[0][0];
-    onFan[0] = datas[0][1];
+    onFan[1] = datas[0][1];
     offFan[0] = datas[1][0];
-    offFan[0] = datas[1][1];
+    offFan[1] = datas[1][1];
     getFanTime(onFan, true);
     getFanTime(offFan, false);
 
     if (checkRightDirection(datas[0][0], datas[1][0], datas[0][1], datas[1][1])) {
-      if (!lightState) {
-        if (isMore(h, m, onFan[0], onFan[1])) {
-          fanState = 1;
-        }
-        if (isMore(h, m, datas[0][0], datas[0][1])) {
-          lightState = 1;
-        }
+      if (isMore(h, m, datas[0][0], datas[0][1]) && !isMore(h, m, datas[1][0], datas[1][1])) {
+        lightState = 1;
       } else {
-        if (!isMore(h, m, onFan[0], onFan[1]) || isMore(h, m, offFan[0], offFan[1])) {
-          fanState = 0;
-        }
-        if (!isMore(h, m, datas[0][0], datas[0][1]) || isMore(h, m, datas[1][0], datas[1][1])) {
-          lightState = 0;
-        }
+        lightState = 0;
+      }
+
+      if (isMore(h, m, onFan[0], onFan[1]) && !isMore(h, m, offFan[0], offFan[1])) {
+        fanState = 1;
+      } else {
+        fanState = 0;
       }
     } else {
-      if (!lightState) {
-        if (isMore(h, m, onFan[0], onFan[1]) || !isMore(h, m, offFan[0], offFan[1])) {
-          fanState = 1;
-        }
-        if (isMore(h, m, datas[0][0], datas[0][1]) || !isMore(h, m, datas[1][0], datas[1][1])) {
-          lightState = 1;
-        }
+      if (isMore(h, m, datas[1][0], datas[1][1]) && !isMore(h, m, datas[0][0], datas[0][1])) {
+        lightState = 0;
       } else {
-        if (isMore(h, m, onFan[0], onFan[1])) {
-          fanState = 0;
-        }
-        if (isMore(h, m, datas[0][0], datas[0][1])) {
-          lightState = 0;
-        }
+        lightState = 1;
+      }
+
+      if (isMore(h, m, offFan[0], offFan[1]) && !isMore(h, m, onFan[0], onFan[1])) {
+        fanState = 0;
+      } else {
+        fanState = 1;
       }
     }
 
     if (checkRightDirection(datas[2][0], datas[3][0], datas[2][1], datas[3][1])) {
-      if (!socketState) {
-        if (isMore(h, m, datas[2][0], datas[2][1])) {
-          socketState = 1;
-        }
+      if (isMore(h, m, datas[2][0], datas[2][1]) && !isMore(h, m, datas[3][0], datas[3][1])) {
+        socketState = 1;
       } else {
-        if (!isMore(h, m, datas[2][0], datas[2][1]) || isMore(h, m, datas[3][0], datas[3][1])) {
-          socketState = 0;
-        }
+        socketState = 0;
       }
     } else {
-      if (!socketState) {
-        if (isMore(h, m, datas[2][0], datas[2][1]) || !isMore(h, m, datas[3][0], datas[3][1])) {
-          socketState = 1;
-        }
+      if (isMore(h, m, datas[3][0], datas[3][1]) && !isMore(h, m, datas[2][0], datas[2][1])) {
+        socketState = 0;
       } else {
-        if (isMore(h, m, datas[2][0], datas[2][1])) {
-          socketState = 0;
-        }
+        socketState = 1;
       }
     }
   }
