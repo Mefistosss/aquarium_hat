@@ -13,7 +13,7 @@ const int selectButtonPin = 6;
 const int lightsPin = 5;
 const int socketPin = 7;
 const int fanPin = 8;
-const int fanBoradPin = 9;
+const int fanBoardPin = 9;
 
 int menuButtonState = 0;
 int menuTypeState = -1;
@@ -48,6 +48,8 @@ const int timeOfDisplayLight = 30000;
 
 void setup()
 {
+//  Serial.begin(9600);
+//  Serial.print("\t");
   delay(300);
   time.begin();
 //  time.settime(0,20,20);
@@ -63,7 +65,7 @@ void setup()
   {
     time.settime(0,0,0);
     lcd.home ();
-    lcd.print(time.gettime("H:i:s"));
+    lcd.print(time.gettime((char *)"H:i:s"));
 //    time.blinktime(2);
   }
 
@@ -92,8 +94,8 @@ void setup()
   pinMode(lightsPin, OUTPUT);
   pinMode(socketPin, OUTPUT);
   pinMode(fanPin, OUTPUT);
-  pinMode(fanBoradPin, OUTPUT);
-  digitalWrite(fanBoradPin, HIGH);
+  pinMode(fanBoardPin, OUTPUT);
+  digitalWrite(fanBoardPin, HIGH);
 }
 
 void loop()
@@ -165,7 +167,7 @@ void buttonsClick(long currentMillis)
       if (menuButtonState == 1) {
         if (menuTypeState2 > -1) {
           menuTypeState2++;
-          if (menuTypeState < 4 && menuTypeState2 > 1 || menuTypeState2 > 2) {
+          if ((menuTypeState < 4 && menuTypeState2 > 1) || (menuTypeState2 > 2)) {
             menuTypeState2 = -1;
             eppromWrite();
           }
@@ -299,7 +301,7 @@ void secondMenu()
 
 void timeMenu()
 {
-  int value;
+  int value = 9;
   time.gettime();
   switch(menuTypeState2) {
     case 0:
@@ -312,7 +314,9 @@ void timeMenu()
       value = time.weekday;
       break;
   }
-  lcd.print(getSecondMenuStr(value, menuTypeState2));
+  if (value != 9) {
+    lcd.print(getSecondMenuStr(value, menuTypeState2));
+  }
 }
 
 void select()
@@ -357,7 +361,7 @@ void mainDisplay(long currentMillis, int force)
 {
   if(currentMillis % 1000 == 0 || force) {
     lcd.home ();
-    lcd.print(time.gettime("H:i:s, D"));
+    lcd.print(time.gettime((char *)"H:i:s, D"));
     lcd.setCursor(0, 1);
     lcd.print("                ");
   }
@@ -386,22 +390,18 @@ boolean checkRightDirection(int h1, int h2, int m1, int m2)
 
 boolean isMore(int currentH, int currentM, int h, int m)
 {
-  if (h == currentH && m == currentM) {
-    return true;
-  } else {
-    if (h > currentH) {
+  if (currentH >= h) {
+    if (currentM >= m) {
       return true;
     } else {
-      if (h == currentH) {
-        return m > currentM;
-      } else {
-        return false;
-      }
+      return false;
     }
+  } else {
+    return false;
   }
 }
 
-int getFanTime(int mas[], boolean on)
+void getFanTime(int mas[], boolean on)
 {
   int fan = 1, h = mas[0], m = mas[1];
 
@@ -409,7 +409,7 @@ int getFanTime(int mas[], boolean on)
     m = m - fan;
     if (m < 0) {
       h = h - 1;
-      m = 59;
+      m = 59 + m;
       if (h < 0) {
         h = 23;
       }
