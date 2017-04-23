@@ -65,7 +65,7 @@ void setup()
   {
     time.settime(0,0,0);
     lcd.home ();
-    lcd.print(time.gettime("H:i:s"));
+    lcd.print(time.gettime((char *)"H:i:s"));
 //    time.blinktime(2);
   }
 
@@ -167,7 +167,7 @@ void buttonsClick(long currentMillis)
       if (menuButtonState == 1) {
         if (menuTypeState2 > -1) {
           menuTypeState2++;
-          if (menuTypeState < 4 && menuTypeState2 > 1 || menuTypeState2 > 2) {
+          if ((menuTypeState < 4 && menuTypeState2 > 1) || (menuTypeState2 > 2)) {
             menuTypeState2 = -1;
             eppromWrite();
           }
@@ -301,7 +301,7 @@ void secondMenu()
 
 void timeMenu()
 {
-  int value;
+  int value = 9;
   time.gettime();
   switch(menuTypeState2) {
     case 0:
@@ -314,7 +314,9 @@ void timeMenu()
       value = time.weekday;
       break;
   }
-  lcd.print(getSecondMenuStr(value, menuTypeState2));
+  if (value != 9) {
+    lcd.print(getSecondMenuStr(value, menuTypeState2));
+  }
 }
 
 void select()
@@ -359,7 +361,7 @@ void mainDisplay(long currentMillis, int force)
 {
   if(currentMillis % 1000 == 0 || force) {
     lcd.home ();
-    lcd.print(time.gettime("H:i:s, D"));
+    lcd.print(time.gettime((char *)"H:i:s, D"));
     lcd.setCursor(0, 1);
     lcd.print("                ");
   }
@@ -399,7 +401,7 @@ boolean isMore(int currentH, int currentM, int h, int m)
   }
 }
 
-int getFanTime(int mas[], boolean on)
+void getFanTime(int mas[], boolean on)
 {
   int fan = 1, h = mas[0], m = mas[1];
 
