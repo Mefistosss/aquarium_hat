@@ -388,18 +388,14 @@ boolean checkRightDirection(int h1, int h2, int m1, int m2)
 
 boolean isMore(int currentH, int currentM, int h, int m)
 {
-  if (h == currentH && m == currentM) {
-    return true;
-  } else {
-    if (currentH > h) {
+  if (currentH >= h) {
+    if (currentM >= m) {
       return true;
     } else {
-      if (h == currentH) {
-        return currentM > m;
-      } else {
-        return false;
-      }
+      return false;
     }
+  } else {
+    return false;
   }
 }
 
@@ -411,7 +407,7 @@ int getFanTime(int mas[], boolean on)
     m = m - fan;
     if (m < 0) {
       h = h - 1;
-      m = 59;
+      m = 59 + m;
       if (h < 0) {
         h = 23;
       }
