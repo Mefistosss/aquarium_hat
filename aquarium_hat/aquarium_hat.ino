@@ -390,7 +390,9 @@ boolean checkRightDirection(int h1, int h2, int m1, int m2)
 
 boolean isMore(int currentH, int currentM, int h, int m)
 {
-  if (currentH >= h) {
+  if (currentH > h) {
+    return true;
+  } else if (currentH == h) {
     if (currentM >= m) {
       return true;
     } else {
@@ -403,7 +405,7 @@ boolean isMore(int currentH, int currentM, int h, int m)
 
 void getFanTime(int mas[], boolean on)
 {
-  int fan = 1, h = mas[0], m = mas[1];
+  int fan = 5, h = mas[0], m = mas[1];
 
   if(on) {
     m = m - fan;
@@ -449,19 +451,21 @@ void checkStates(long currentMillis)
       } else {
         lightState = 0;
       }
-
-      if (isMore(h, m, onFan[0], onFan[1]) && !isMore(h, m, offFan[0], offFan[1])) {
-        fanState = 1;
-      } else {
-        fanState = 0;
-      }
     } else {
       if (isMore(h, m, datas[1][0], datas[1][1]) && !isMore(h, m, datas[0][0], datas[0][1])) {
         lightState = 0;
       } else {
         lightState = 1;
       }
+    }
 
+    if (checkRightDirection(onFan[0], offFan[0], onFan[1], offFan[1])) {
+      if (isMore(h, m, onFan[0], onFan[1]) && !isMore(h, m, offFan[0], offFan[1])) {
+        fanState = 1;
+      } else {
+        fanState = 0;
+      }
+    } else {
       if (isMore(h, m, offFan[0], offFan[1]) && !isMore(h, m, onFan[0], onFan[1])) {
         fanState = 0;
       } else {
